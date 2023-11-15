@@ -11,18 +11,17 @@ def validar_lista(lista:list) -> bool:
     else:
         return False
 
-def validar_archivo(archivo):
-    pass
-
 def leer_archivo(nombre_archivo:str):
     try:
         with codecs.open(nombre_archivo, 'r', encoding='UTF-8') as archivo:  #con with no necesito cerrar archivos. Lo hace automaticamente. codecs es para codificar con UTF-8 
             contenido = archivo.read()
-            #retorno = f'Contenido del archivo:  \n {contenido}'
             return contenido
         
     except FileNotFoundError:
         print(f"El archivo {nombre_archivo} no se encontró")
+        return False
+    except:
+        print(f"Error al leer el archivo'{nombre_archivo}'")
         return False
 
 #leer_archivo(nombre_archivo)
@@ -36,12 +35,13 @@ def guardar_archivo(nombre_archivo:str, contenido:str):
         return archivo
     except FileNotFoundError:
         print(f"El archivo {nombre_archivo} no se encontró")
-    except Exception as e:
-        print(f"Error al crear el archivo: {nombre_archivo}: {str(e)}")
+        return False
+    except:
+        print(f"Error al crear el archivo: {nombre_archivo}:")
         return False
 
-#contenido_guardar_archivo = 'asdasdasd'
-#guardar_archivo(nombre_archivo, contenido_guardar_archivo)
+# contenido_guardar_archivo = 'prueba'
+# guardar_archivo("prueba", contenido_guardar_archivo)
 
 #1.3
 def generar_csv(archivo_superheroes_csv:csv, lista_superheroes:list):
@@ -74,9 +74,10 @@ def leer_csv(nombre_archivo_csv):
             return lista_csv
     except FileNotFoundError:
         print(f"El archivo '{nombre_archivo_csv}' no se encontró.")
-    except Exception as e:
-        print(f"Se produjo un error al leer el archivo '{nombre_archivo_csv}': {str(e)}")
-    return False
+        return False
+    except:
+        print(f"Error al leer el archivo'{nombre_archivo_csv}'")
+        return False
 
 #leer_csv("data_05.csv")
 #print(lista_personajes)
@@ -99,6 +100,8 @@ def leer_json(nombre_archivo, nombre_lista):
             return lista_obtenida
     except FileNotFoundError:
         print(f"El archivo '{nombre_archivo}' no se encontró.")
+    except:
+        print(f"Error al leer el archivo'{nombre_archivo}'")
     return False
 
 # lista_pjs = leer_json('heroes.json','heroes')
