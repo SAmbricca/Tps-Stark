@@ -60,7 +60,6 @@ def obtener_dato_formato(dato_especifico: str):
     return dato_snake_case
 
 #print(obtener_dato_formato("Howard the Duck"))
-
 #1.3
 def stark_imprimir_nombre_con_iniciales(dict_heroe: dict):
     if not validar_dict_con_nombre(dict_heroe):
@@ -81,11 +80,11 @@ def stark_imprimir_nombres_con_iniciales(lista_heroes: list):
     if not validar_lista(lista_heroes):
         return False
     
-    lista_nombres_con_iniciales = []
+    retorno = ""
     for personaje in lista_heroes:
-        lista_nombres_con_iniciales.append(stark_imprimir_nombre_con_iniciales(personaje))
+        retorno += stark_imprimir_nombre_con_iniciales(personaje) + "\n"
     
-    return lista_nombres_con_iniciales
+    return retorno
 
 #print(stark_imprimir_nombres_con_iniciales(lista_personajes))
 
@@ -100,7 +99,7 @@ def generar_codigo_heroe(dict_heroe: dict, id: int):
         codigo_heroe = f'M-{primer_numero}{relleno_id}'
 
     elif dict_heroe['genero'] == 'F':
-        primer_numero = 0
+        primer_numero = 2
         relleno_id = str(id).zfill(7)[:7]
         codigo_heroe = f'F-{primer_numero}{relleno_id}'
 
@@ -136,7 +135,7 @@ def stark_generar_codigos_heroes(lista_heroes: list):
 
 #3.1
 def sanitizar_entero(numero_str: str):
-    numero_str = numero_str.strip() #.strip elimina los espacios en blanco al principio y al final del string
+    numero_str = numero_str.strip() #.strip elimina los caracteres especificados (por defecto, espacios en blanco) tanto al principio y al final del string
     try:
         numero_entero = int(numero_str)
         if numero_entero < 0:
@@ -181,10 +180,10 @@ def sanitizar_string(valor_str: str, valor_por_defecto = '-'):
 #3.4
 def sanitizar_dato(dict_heroe: dict, clave: str, tipo_dato: str):
     if not validar_str(tipo_dato) or (tipo_dato.lower() != "entero" and tipo_dato.lower() != "flotante"):
-        return print("Tipo de dato no reconocido")
+        return "Tipo de dato no reconocido"
     
     if clave not in dict_heroe:
-        return print("La clave especificada no existe en el héroe")
+        return "La clave especificada no existe en el héroe"
     
     retorno = False
     if tipo_dato.lower() == "string":
@@ -222,6 +221,7 @@ def stark_imprimir_indice_nombre(lista_heroes: list):
         palabras = re.findall(r'\b(?!the\b)\w+', personaje['nombre']) #A diferencia de la funcion extraer_iniciales(), agregue un '+' al final de la expresion r'\b(?!the\b)\w+' para quedarme con todo el nombre
         indice_nombre += '-'.join(palabras) + '-'
     
+    indice_nombre = indice_nombre.rstrip('-') #Analogo a strip pero solo con el ultimo caracter
     return indice_nombre
 
 #print(stark_imprimir_indice_nombre(lista_personajes))
@@ -252,7 +252,7 @@ def generar_encabezado(titulo: str):
 #generar_encabezado("Principal")
 
 #5.3
-def imprimir_ficha_heroe(dict_heroe: dict):
+def imprimir_ficha_heroe(dict_heroe: dict, id):
     if not validar_dict_con_nombre(dict_heroe):
         return False
     
@@ -261,7 +261,7 @@ def imprimir_ficha_heroe(dict_heroe: dict):
     identidad = identidad.replace(" ", "_")
     consultora = dict_heroe['empresa'].lower()
     consultora = consultora.replace(" ", "_")
-    codigo = generar_codigo_heroe(dict_heroe, 0)
+    codigo = generar_codigo_heroe(dict_heroe, id)
 
     altura = '{:.0f}'.format(float(dict_heroe['altura'])) + " cm."
     peso = '{:.2f}'.format(float(dict_heroe['peso'])) + ' kg.'
@@ -278,21 +278,30 @@ def stark_navegar_fichas(lista_heroes: str):
     if not validar_lista(lista_heroes):
         return False
     iteracion = 0
+    id = 1
     while True:
-        print(imprimir_ficha_heroe(lista_heroes[iteracion]))
+        print(imprimir_ficha_heroe(lista_heroes[iteracion], id))
         opcion = input("\nIngrese alguna de las siguientes opciones:\n[1] Ir a la izquierda      [2] Ir a la derecha     [3] Salir\nOpcion:")
         while opcion != "1" and opcion != "2" and opcion != "3":
             opcion = input("\nIngrese alguna de las siguientes opciones:\n[1] Ir a la izquierda      [2] Ir a la derecha     [3] Salir\nOpcion:")
         if opcion == "1":
-            iteracion -= 1
+            if iteracion == 0:
+                iteracion = len(lista_heroes) - 1
+                id = len(lista_heroes)
+            else:
+                iteracion -= 1
+                id -= 1
         elif opcion == "2":
-            if iteracion == len(lista_heroes):
+            if iteracion == len(lista_heroes) - 1:
                 iteracion = 0
+                id = 1
             else:
                 iteracion += 1
+                id += 1
         elif opcion == "3":
             break
-
+        print(iteracion)
+        
 #stark_navegar_fichas(lista_personajes)
 
 def imprimir_menu_04():
@@ -307,10 +316,10 @@ def imprimir_menu_04():
 #EXTRAS
 
 def imprimir_lista_de_nombres_y_codigos(lista_heroes):
-    lista = []
+    retorno = ""
     id = 1
     for personaje in lista_heroes:
-        string = f'{personaje["nombre"]}-{generar_codigo_heroe(personaje, id)}'
-        lista.append(string)
+        retorno += f'{personaje["nombre"]}-{generar_codigo_heroe(personaje, id)}\n'
         id += 1
-    print(lista)
+
+    return print(retorno)
