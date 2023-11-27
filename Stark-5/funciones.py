@@ -21,7 +21,7 @@ def leer_archivo(nombre_archivo:str):
         print(f"El archivo {nombre_archivo} no se encontró")
         return False
     except:
-        print(f"Error al leer el archivo'{nombre_archivo}'")
+        print(f"Error al leer el archivo'{nombre_archivo}':")
         return False
 
 #leer_archivo(nombre_archivo)
@@ -70,13 +70,13 @@ def leer_csv(nombre_archivo_csv):
             lista_csv = []
             for fila in lector_csv:
                 lista_csv.append(dict(fila))
-            print(lista_csv)
+
             return lista_csv
     except FileNotFoundError:
         print(f"El archivo '{nombre_archivo_csv}' no se encontró.")
         return False
     except:
-        print(f"Error al leer el archivo'{nombre_archivo_csv}'")
+        print(f"Error al leer el archivo'{nombre_archivo_csv}':")
         return False
 
 #leer_csv("data_05.csv")
@@ -88,6 +88,8 @@ def generar_json(nombre_archivo_a_guardar:json, lista_superheroes:list, nombre_l
     
     with open(nombre_archivo_a_guardar, 'w') as archivo:
         json.dump(dict_json, archivo, indent=4)
+    
+    print(f"Se creó el archivo: {nombre_archivo_a_guardar}")
 
 #generar_json("heroes.json", lista_personajes, "heroes")
 
@@ -101,7 +103,7 @@ def leer_json(nombre_archivo, nombre_lista):
     except FileNotFoundError:
         print(f"El archivo '{nombre_archivo}' no se encontró.")
     except:
-        print(f"Error al leer el archivo'{nombre_archivo}'")
+        print(f"Error al leer el archivo'{nombre_archivo}':")
     return False
 
 # lista_pjs = leer_json('heroes.json','heroes')
@@ -111,21 +113,25 @@ def leer_json(nombre_archivo, nombre_lista):
 def orden_ascendente_clave_numerica(lista_heroes:list, clave:str):
     for i in range(len(lista_heroes)-1):
         for j in range(i+1, len(lista_heroes)):
-            if (lista_heroes[i][clave] > lista_heroes[j][clave]):
+            valor_i = float(lista_heroes[i][clave])
+            valor_j = float(lista_heroes[j][clave])
+            if valor_i > valor_j:
                 aux = lista_heroes[i]
                 lista_heroes[i] = lista_heroes[j]
                 lista_heroes[j] = aux
 
     for personaje in lista_heroes:
         print(f'Nombre: {personaje["nombre"]}, {clave}: {personaje[clave]}')
-
-#orden_ascendente_clave_numerica(lista_personajes, 'fuerza')
+# stark_normalizar_datos(lista_personajes, "fuerza", "altura", "peso")
+# orden_ascendente_clave_numerica(lista_personajes, 'altura')
 
 #2.2
 def orden_descendente_clave_numerica(lista_heroes:list, clave:str):
     for i in range(len(lista_heroes)-1):
         for j in range(i+1, len(lista_heroes)):
-            if (lista_heroes[i][clave] < lista_heroes[j][clave]):
+            valor_i = float(lista_heroes[i][clave])
+            valor_j = float(lista_heroes[j][clave])
+            if valor_i < valor_j:
                 aux = lista_heroes[i]
                 lista_heroes[i] = lista_heroes[j]
                 lista_heroes[j] = aux
@@ -142,14 +148,11 @@ def orden_ascendente_o_descendente_clave_numerica(lista_heroes:list, clave:str, 
 
 
 def imprimir_menu_05():
-    mensaje = '''● 1-Normalizar datos (No debe dejar de entrar a las otras opciones)
-● 2-Generar CSV (Guardar la lista generada en otra variable)
-● 3-Listar heroes del archivo CSV ordenados por altura ASC (Validar si el
-mismo existe)
-● 4-Generar JSON (Guardar la lista generada en otra variable)
-● 5-Listar heroes del archivo JSON ordenados por peso DESC (Validar si
-el mismo existe)
-● 6-Ordenar Lista por fuerza (Se le tiene que preguntar al usuario si
-ordenar de manera ASC o DESC
+    mensaje = '''● 1-Normalizar datos
+● 2-Generar CSV
+● 3-Listar heroes del archivo CSV ordenados por altura ASC
+● 4-Generar JSON
+● 5-Listar heroes del archivo JSON ordenados por peso DESC
+● 6-Ordenar Lista por fuerza (De manera Ascendente o Descendente)
 ● 7-Salir'''
     return mensaje
