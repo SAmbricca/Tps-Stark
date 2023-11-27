@@ -7,7 +7,7 @@ nombre_archivo_json = 'heroes_05.json'
 def stark_marvel_app(lista_principal: list):
     flag_normalizado = False
     while True:
-        print(imprimir_menu_05())
+        print(f"\n{imprimir_menu_05()}")
         opcion = input("Ingrese una opcion entre 1 y 7: ")
         if opcion == "1":
             stark_normalizar_datos(lista_principal, "fuerza", "altura", "peso") #lo traje del stark 3
